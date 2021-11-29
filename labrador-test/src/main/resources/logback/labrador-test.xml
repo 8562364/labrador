@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+  <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+  <springProperty name="PROFILES_ACTIVE" source="spring.profiles.active"/>
+  <springProperty name="APP" source="spring.application.name"/>
+  <springProperty name="APP_NAME" source="spring.application.name" defaultValue="NOT_SET"/>
+  <springProperty name="ENV_NAME" source="spring.profile.active" defaultValue="NOT_SET"/>
+  <springProperty name="HOSTNAME" source="spring.hostname" defaultValue="NOT_SET"/>
+  <springProperty name="CAPTAIN_SEQ" source="labrador.info.captain.seq" defaultValue="NOT_SET"/>
+  <springProperty name="CAPTAIN_GEN" source="labrador.info.captain.gen" defaultValue="NOT_SET"/>
+  <springProperty name="BUILD_NAME" source="labrador.info.build.name" defaultValue="NOT_SET"/>
+  <springProperty name="BUILD_GIT_VERSION" source="labrador.info.build.git.version" defaultValue="NOT_SET"/>
+  <springProperty name="BUILD_GIT_HASH" source="labrador.info.build.git.hash" defaultValue="NOT_SET"/>
+  <springProperty name="BUILD_TIMESTAMP" source="labrador.info.build.timestamp" defaultValue="NOT_SET"/>
+
+  <!-- This is the kafkaAppender -->
+<!--  <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">-->
+<!--    &lt;!&ndash; This is the default encoder that encodes every log message to an utf8-encoded string  &ndash;&gt;-->
+<!--    <encoder class="com.github.danielwegener.logback.kafka.encoding.PatternLayoutKafkaMessageEncoder">-->
+<!--      &lt;!&ndash; About how to config LogstashLayout, please read https://github.com/logstash/logstash-logback-encoder/blob/master/README.md &ndash;&gt;-->
+<!--      <layout class="net.logstash.logback.layout.LogstashLayout">-->
+<!--        <customFields>-->
+<!--          {"app":"\${APP}","profile":"\${PROFILES_ACTIVE}","app_name":"\${APP_NAME}","env_name":"\${ENV_NAME}","hostname":"\${HOSTNAME}","captain_seq":"\${CAPTAIN_SEQ}","captain_gen":"\${CAPTAIN_GEN}","build_name":"\${BUILD_NAME}","build_git_version":"\${BUILD_GIT_VERSION}","build_git_hash":"\${BUILD_GIT_HASH}","build_timestamp":"\${BUILD_TIMESTAMP}"}-->
+<!--        </customFields>-->
+<!--      </layout>-->
+<!--    </encoder>-->
+
+<!--    <topic>applog-exchange</topic>-->
+<!--    <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.RoundRobinKeyingStrategy"/>-->
+<!--    <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>-->
+
+<!--    &lt;!&ndash; each <producerConfig> translates to regular kafka-client config (format: key=value) &ndash;&gt;-->
+<!--    &lt;!&ndash; producer configs are documented here: https://kafka.apache.org/documentation.html#newproducerconfigs &ndash;&gt;-->
+<!--    &lt;!&ndash; bootstrap.servers is the only mandatory producerConfig &ndash;&gt;-->
+<!--    <producerConfig>bootstrap.servers=${log.kafka.servers}</producerConfig>-->
+
+<!--    &lt;!&ndash; this is the fallback appender if kafka is not available. &ndash;&gt;-->
+<!--    <appender-ref ref="CONSOLE"/>-->
+<!--  </appender>-->
+
+
+
+  <!--ASYNC LOG-->
+  <appender name="CONSOLE_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <discardingThreshold>0</discardingThreshold>
+    <queueSize>20480</queueSize>
+    <appender-ref ref="CONSOLE"/>
+  </appender>
+<!--  <appender name="KAFKA_APPENDER_ASYNC" class="ch.qos.logback.classic.AsyncAppender">-->
+<!--    <discardingThreshold>0</discardingThreshold>-->
+<!--    <queueSize>20480</queueSize>-->
+<!--    <appender-ref ref="KAFKA_APPENDER"/>-->
+<!--  </appender>-->
+
+  <logger name="com.huobi.jasmine.exchange.remote.http.ClearingHttpApi" level="debug"/>
+
+  <root level="INFO">
+    <springProfile name="local">
+      <appender-ref ref="CONSOLE_ASYNC"/>
+    </springProfile>
+    <springProfile name="!local">
+      <appender-ref ref="CONSOLE_ASYNC"/>
+<!--      <appender-ref ref="KAFKA_APPENDER_ASYNC"/>-->
+    </springProfile>
+
+  </root>
+
+</configuration>
+

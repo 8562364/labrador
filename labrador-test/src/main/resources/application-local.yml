@@ -1,0 +1,16 @@
+labrador:
+  info:
+    captain:
+      seq: 1
+      gen: x
+    builder:
+      name: labrador-test
+      timestamp: 121313123
+      git:
+        version: 1
+        hash: 2
+
+spring:
+  output:
+    ansi:
+      enabled: always

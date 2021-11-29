@@ -1,0 +1,24 @@
+# OPS need info to do health check, please discuss with OPS before changing them.
+spring:
+  main:
+    web-application-type: servlet
+  application:
+    name: labrador-test
+  profiles:
+    active: ${ENV_NAME:local}
+  cloud:
+    config:
+      uri: ${CONFIG_SERVERS:https://conf.longfor.com/}
+      fail-fast: true
+      enabled: false
+
+logging:
+  config: classpath:logback/${spring.application.name}.xml
+  level:
+    root: warn
+    org.springframework.web: debug
+    org.hibernate: error
+
+
+
+
