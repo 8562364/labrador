@@ -11,6 +11,9 @@ spring:
       uri: ${CONFIG_SERVERS:https://conf.longfor.com/}
       fail-fast: true
       enabled: false
+  output:
+    ansi:
+      enabled: always
 
 logging:
   config: classpath:logback/${spring.application.name}.xml
@@ -18,6 +21,7 @@ logging:
     root: warn
     org.springframework.web: debug
     org.hibernate: error
+
 
 
 
